@@ -1,47 +1,24 @@
 # **Finding Lane Lines on the Road** 
 
-## Writeup Template
-
-### You can use this file as a template for your writeup if you want to submit it as a markdown file. But feel free to use some other method and submit a pdf if you prefer.
-
----
-
-**Finding Lane Lines on the Road**
-
-The goals / steps of this project are the following:
-* Make a pipeline that finds lane lines on the road
-* Reflect on your work in a written report
-
-
-[//]: # (Image References)
-
-[image1]: ./examples/grayscale.jpg "Grayscale"
-
----
-
 ### Reflection
 
 ### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-My pipeline consisted of 5 steps. First, I converted the images to grayscale, then I .... 
+My pipeline used the same basic methodology as the quizzes, up until finding Hough lines.
+Once I have the Hough lines, I partition them on the slope sign (positive slope = left, negative = right)
+and use numpy's polyfit to fit a line to each of the lane's points.
 
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function by ...
-
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
-
-![alt text][image1]
-
+I then calculate the intersection point of the 2 lanes and draw those lines up to the intersection point 
+(minus some offset). 
 
 ### 2. Identify potential shortcomings with your current pipeline
 
-
-One potential shortcoming would be what would happen when ... 
-
-Another shortcoming could be ...
-
+1) The lane lines are not smooth.
+2) If I do not discover any lines, no lanes are drawn.
+3) There are a few points in the yellow lanes video there the algorithm gets completely lost.
 
 ### 3. Suggest possible improvements to your pipeline
 
-A possible improvement would be to ...
-
-Another potential improvement could be to ...
+1 and 2) I could keep a fixed buffer of previous coefficients and average them (with a weight factor, 
+         so that newer slopes are more important)
+3) I could filter segments more aggressively, based on how far the slope is from the average. 
